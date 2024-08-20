@@ -144,7 +144,7 @@ Make sure to create DNS records for both your root domain and subdomain. This in
 
 - Go to your domain name in a web browser to verify that your website is accessible.
 
-![35](img/35.png)
+![35](img/Screenshot%20(7).png)
 
 > [!NOTE]
 You may notice the sign that says **Not secure**. Next, you'll use certbot to obtain the SSL certificate necessary to enable HTTPS on your site.

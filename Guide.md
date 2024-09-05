@@ -13,5 +13,4 @@
 
    In summary, GitHub is a platform where people store, share, and work on code together, making it easier to manage projects and collaborate with others.
 
-- What you will do there
-![1](img/gmt20240812-201755_recording_1920x1080.mp4)
+- What you will do the

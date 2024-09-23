@@ -14,7 +14,7 @@
 
 ## Deploy 4 ubuntu servers
 - deploy 4 ubuntu servers with reference from [**"Project1"**](https://github.com/UDEJI-EBUBE/Devops-bootcamp/blob/main/project1-Setting%20Up%20A%20Static%20Website%20Using%20Nginx.md), make sure to name the servers accordingly to properly differenciate them
-![1](img)
+![1](img/Screenshot%20(118).png)
 
 ## Allow Required Ports In The Security Group
 The Consul service requires specific ports to function correctly. Please open the following ports in your security group.
@@ -31,37 +31,30 @@ The Consul service requires specific ports to function correctly. Please open th
 | 8  |WAN Serf   |TCP and UDP   |8302           |
 
 - Select the **checkbox①** next to your instance, click on **Security②**, and then click on the **security group ID③**.
-![2](img)
 
 - Click on **Edit inbound rules**.
-![3](img)
+![3](img/Screenshot%20(117).png)
 
 - Click on **Add rule**.
-![4](img)
 
 - Enter the **Port range**.
-![5](img)
 
 > [!NOTE]
 This port supports both TCP and UDP protocols, so you'll need to configure both.
 
 - Choose the appropriate CIDR block.
-![6](img)
 
 - Click on **Add Rule** to specify the port range for the UDP protocol.
-![7](img)
 
 - Click on the **Type field①** and choose **Custom UDP**② from the dropdown menu.
-![8](img)
 
 - Enter the **Port range** and choose the **CIDR blocks**.
-![9](img)
 
 > [!NOTE]
 Repeat this process until you've opened up all necessary ports.
 
 - Verify that all the necessary ports are open.
-![10](img)
+![10](img/Screenshot%20(116).png)
 
 - Click on **Save rules** to apply the updated security group settings.
 ---
@@ -80,16 +73,19 @@ echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://
 sudo apt update && sudo apt install consul
 ```
 
-![11](img)
+![11](img/Screenshot%20(120).png)
+
+![12](img/Screenshot%20(121).png)
+
+![13](img/Screenshot%20(122).png)
 
 - Confirm Consul installation by checking its version with the **`consul --version`** command.
-![12](img)
+![12](img/Screenshot%20(123).png)
 
 - All the Consul server configurations are located in the **`/etc/consul.d`** folder. To configure the Consul server, start by backing up the default configuration file **`consul.hcl`** by renaming it to **`consul.hcl.back`**, using the following command: **`sudo mv /etc/consul.d/consul.hcl /etc/consul.d/consul.hcl.back`**
-![13](img)
 
 - Generate an **encrypted key** using the **`consul keygen`** command.
-![14](img)
+![14](img/Screenshot%20(123).png)
 
 - Create a new file named **`consul.hcl`** in the **`/etc/consul.d`** directory, using the following command: **`sudo vi /etc/consul.d/consul.hcl`**
 
@@ -106,23 +102,22 @@ sudo apt update && sudo apt install consul
 "log_level" = "INFO"
 ```
 
-![15](img)
+![15](img/Screenshot%20(124).png)
 
 Save this file after adding the content.
 
 ---
 
 - Run the following command to start the Consul server in the background: **`sudo nohup consul agent -dev -config-dir /etc/consul.d/ &`**.
-![16](img)
 
 > [!NOTE]
 We use the **`-dev`** flag to indicate that we are running a single Consul server in development mode.
 
 - You can check the status of the Consul server with the following command: **`consul members`**.
-![17](img)
+![17](img/Screenshot%20(125).png)
 
 - If you visit **`<EC2 Consul Server IP>:8500`**, you should be able to access the Consul dashboard.
-![18](img)
+![18](img/Screenshot%20(130).png)
 
 ---
 
@@ -131,13 +126,12 @@ We use the **`-dev`** flag to indicate that we are running a single Consul serve
 **Apply the configurations below on both backend servers:**
 
 - SSH into the backend servers and run **`sudo apt-get update -y`** to update package information.
-![19](img)
+![19](img/Screenshot%20(131).png)
 
 > [!NOTE]
 The `y` flag automatically answers **"yes"** to any prompts during the installation process, ensuring that the installation proceeds without requiring manual confirmation.
 
 - Install Nginx on both instances by running the following command: **`sudo apt install nginx -y`**.
-![20](img)
 
 > [!NOTE]
 After installing Nginx, navigate to the default HTML directory and modify the index.html file on both servers to differentiate them.
@@ -160,7 +154,7 @@ After installing Nginx, navigate to the default HTML directory and modify the in
 </html>
 ```
 
-![21](img)
+![21](img/Screenshot%20(132).png)
 
 - Install Consul as an agent on the servers. Run the following commands to install Consul:
 
@@ -172,10 +166,10 @@ echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://
 sudo apt update && sudo apt install consul
 ```
 
-![22](img)
+![22](img/Screenshot%20(133).png)
 
 - Verify that Consul is installed properly by running the following command: **`consul --version`**.
-![23](img)
+![23](img/Screenshot%20(134).png)
 
 - Replace the default Consul configuration file **`config.hcl`** located in **`/etc/consul.d`** with your custom **`consul.hcl`** file.
 
@@ -200,7 +194,7 @@ sudo vi /etc/consul.d/consul.hcl
 "start_join" = ["34.201.77.72"]
 ```
 
-![24](img)
+![24](img/Screenshot%20(135).png)
 
 - Use the following command to create and edit the file: **`sudo vi /etc/consul.d/backend.hcl`**.
 
@@ -217,23 +211,25 @@ sudo vi /etc/consul.d/consul.hcl
 }
 ```
 
-![28](img/28.png)
+![29](img/Screenshot%20(136).png)
 
 This configuration registers your backend servers with the Consul server and sets up a health check that uses curl to test the service every 3 seconds.
 
 - Verify the configurations by executing the following command: **`consul validate /etc/consul.d`**.
-![29](img/29.png)
+![30](img/Screenshot%20(137).png)
 
 - Once all configurations are complete, start the Consul agent with the following command: **`sudo nohup consul agent -config-dir /etc/consul.d/ &`**.
-![30](img/30.png)
+![30](img/Screenshot%20(138).png)
 
 - To verify if everything is working correctly, visit your Consul UI. If you see the backend listed in the UI as depicted below, it indicates that the backend has successfully registered itself with Consul.
 
-![31](img/31.png)
+![32](img/Screenshot%20(139).png)
 
-![32](img/32.png)
+![33](img/Screenshot%20(140).png)
 
-![services](img/services.gif)
+![34](img/Screenshot%20(141).png)
+
+![34](img/Screenshot%20(142).png)
 
 ---
 
@@ -246,8 +242,6 @@ sudo apt-get update -y
 sudo apt-get install unzip -y
 ```
 
-![33](img/33.png)
-
 - Install Nginx using the following command: **`sudo apt install nginx -y`**.
 
 - Download the consul-template binary using the following command:
@@ -258,11 +252,11 @@ sudo curl -L  https://releases.hashicorp.com/consul-template/0.30.0/consul-templ
 sudo unzip /opt/consul-template.zip -d  /usr/local/bin/
 ```
 
-![35](img/35.png)
+![36](img/Screenshot%20(144).png)
 
 - To verify the installation of consul-template, check its version with the following command: **`consul-template --version`**.
 
-![36](img/36.png)
+![37](img/Screenshot%20(145).png)
 
 - Create and edit a file named **`load-balancer.conf.ctmpl`** in the **`/etc/nginx/conf.d`** directory, using the following command: **`sudo vi /etc/nginx/conf.d/load-balancer.conf.ctmpl`**.
 
@@ -284,7 +278,7 @@ server {
 }
 ```
 
-![37](img/37.png)
+![38](img/Screenshot%20(146).png)
 
 ---
 .
@@ -318,10 +312,9 @@ template {
 }
 ```
 
-![38](img/38.png)
+![39](img/Screenshot%20(149).png)
 
 - Delete the default server configuration to disable it by running the following command: **`sudo rm /etc/nginx/sites-enabled/default`**.
-![39](img/39.png)
 
 - Restart Nginx to apply the changes by running the following command: **`sudo systemctl restart nginx`**.
 
@@ -331,17 +324,13 @@ template {
 sudo nohup consul-template -config=/etc/nginx/conf.d/consul-template.hcl &
 ```
 
-![40](img/40.png)
-
 - Upon completion, a load-balancer.conf file will be created with backend server information populated from the Consul service registry.
-
-![41](img/41.png)
 
 Now, if you access the load balancer IP in your web browser, it will display the custom HTML content from one of the backend servers. When you refresh the page, the load balancer will route your request to the other backend server, displaying its custom HTML content.
 
-![42](img/42.png)
+![43](img/Screenshot%20(150).png)
 
-![43](img/43.png)
+![44](img/Screenshot%20(151).png)
 
 This behavior occurs because the load balancer uses a round-robin algorithm by default, distributing incoming requests evenly across all available backend servers.
 
@@ -349,22 +338,21 @@ This behavior occurs because the load balancer uses a round-robin algorithm by d
 
 ### Service Discovery Test
 
-Now that everything is set up and running, you can test the configuration by observing what happens when you stop one of your backend servers.
+Now that everything is set up and running, we will test the function of the consul when we stop one of our server
 
-![44](img/44.png)
+- Stop one of the backend servers. The Consul server will monitor the health of each registered service. Once a backend server is stopped, Consul will detect the server's unavailability and mark it as unhealthy. The health check for that server will fail, and it will be removed from the load balancer's active pool of servers.
 
-Stop one of the backend servers. The Consul server will monitor the health of each registered service. Once a backend server is stopped, Consul will detect the server's unavailability and mark it as unhealthy. The health check for that server will fail, and it will be removed from the load balancer's active pool of servers.
+![45](img/Screenshot%20(152).png)
 
-![45](img/45.png)
+![45](img/Screenshot%20(153).png)
 
-As a result, the load balancer will only direct traffic to the remaining healthy backend servers. This ensures that your application continues to run smoothly without any disruption to users, demonstrating the effectiveness of your service discovery and health check configuration with Consul and Nginx.
+- As a result, the load balancer will only direct traffic to the remaining healthy backend servers. This ensures that your application continues to run smoothly without any disruption to users, demonstrating the effectiveness of your service discovery and health check configuration with Consul and Nginx.
 
-![sd_test](img/full_sd_test.gif)
+![sd_test](img/Screenshot%20(154).png)
 
-**Service Check:** These checks are specific to the services running on the nodes (in this case, Nginx). When you stopped Nginx, the service check that monitors the health of Nginx on that particular node would fail, leading to the "all service checks failed" error.
+![45](img/Screenshot%20(155).png)
 
-**Node checks:** These checks monitor the overall health of the node itself, which includes the underlying operating system and possibly other metrics (like CPU, memory, and disk usage). Since stopping Nginx does not necessarily mean the node is unhealthy (the node could still be up and running, responding to pings, etc.), the node checks would still pass.
-
+" FOR FURTHER EXPLAINATION VISIT THE BREAKDOWN"
 ---
 ---
 

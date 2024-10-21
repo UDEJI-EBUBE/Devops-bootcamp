@@ -1,4 +1,4 @@
-# AWS VPC using Terraform
+# Project 8: AWS VPC using Terraform
 
 ## To do this project you need to have the following.
 
@@ -271,3 +271,4 @@ You should see 15 subnets , 6 route tables, internet gateway and NAT gateway as 
 ```
 terraform destroy  -var-file=../../vars/dev/vpc.tfvars
 ```
+VISIT THE PROJECT BREAKDOWN FOR MORE INFORMATION
